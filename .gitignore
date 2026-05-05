@@ -32,6 +32,10 @@ Thumbs.db
 *.log
 logs/
 
+# Claude
+claude.md
+
+
 # Knowledge base / data lokal (opsional, uncomment jika perlu)
 # data/
 # knowledge_base/
