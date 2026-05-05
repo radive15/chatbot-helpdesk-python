@@ -40,10 +40,10 @@ Chatbot internal untuk IT Helpdesk — berjalan **100% lokal** menggunakan Ollam
 - [x] Chatbot hanya menjawab pertanyaan seputar IT
 - [x] Menolak pertanyaan di luar topik IT dengan sopan
 
-### Stage 5 — Streamlit UI ⬜ BELUM MULAI
-- [ ] Web UI dengan Streamlit
-- [ ] Chat interface (bubble chat)
-- [ ] Prototype untuk validasi fitur
+### Stage 5 — Streamlit UI ✅ SELESAI
+- [x] Web UI dengan Streamlit
+- [x] Chat interface (bubble chat)
+- [x] Prototype untuk validasi fitur
 
 ### Stage 6 — FastAPI ⬜ BELUM MULAI
 - [ ] REST API endpoint untuk chat
@@ -96,8 +96,11 @@ OLLAMA_MODEL=llama3
 # Test koneksi ke Ollama
 python test_ollama.py
 
-# Jalankan chatbot
+# Jalankan chatbot (terminal)
 python chatbot.py
+
+# Jalankan web UI (Streamlit)
+streamlit run app.py
 ```
 
 ---
@@ -106,7 +109,8 @@ python chatbot.py
 
 ```
 chatbot-helpdesk-python/
-├── chatbot.py          # Main chatbot dengan IT Helpdesk persona
+├── app.py              # Web UI dengan Streamlit
+├── chatbot.py          # Chatbot terminal dengan IT Helpdesk persona
 ├── test_ollama.py      # Script test koneksi ke Ollama
 ├── requirements.txt    # Python dependencies
 ├── .env                # Konfigurasi lokal (tidak di-push ke GitHub)
