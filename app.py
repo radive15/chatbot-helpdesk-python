@@ -25,18 +25,56 @@ INGAT: Semua respons harus dalam Bahasa Indonesia."""
 
 def initialize_session() -> None:
     """Inisialisasi session state saat pertama kali app dibuka."""
-    # st.session_state adalah cara Streamlit menyimpan data antar interaksi user
-    # Mirip seperti variabel global tapi per-user, per-session
     if "messages" not in st.session_state:
         st.session_state.messages = [
             {"role": "system", "content": SYSTEM_PROMPT}
         ]
 
 
+def clear_chat() -> None:
+    """Reset percakapan — hapus semua kecuali system prompt."""
+    # Kita tidak hapus key-nya, tapi timpa isinya dengan list baru
+    # Ini lebih aman dari del st.session_state.messages karena tidak trigger error
+    st.session_state.messages = [
+        {"role": "system", "content": SYSTEM_PROMPT}
+    ]
+
+
+def count_messages() -> int:
+    """Hitung jumlah pesan user + bot (exclude system prompt)."""
+    return len([m for m in st.session_state.messages if m["role"] != "system"])
+
+
+def render_sidebar() -> None:
+    """Render panel sidebar kiri dengan info dan tombol clear."""
+    with st.sidebar:
+        st.header("Info")
+
+        # Tampilkan model yang sedang dipakai
+        st.markdown(f"**Model:** `{model}`")
+
+        # Hitung jumlah pesan dalam sesi ini
+        msg_count = count_messages()
+        st.markdown(f"**Pesan dalam sesi:** {msg_count}")
+
+        st.divider()
+
+        # Tombol clear chat — st.button() return True saat diklik
+        if st.button("Hapus Percakapan", use_container_width=True, type="secondary"):
+            clear_chat()
+            # st.rerun() paksa Streamlit render ulang halaman setelah state berubah
+            st.rerun()
+
+        st.divider()
+
+        # Info tambahan di bawah sidebar
+        st.caption("HelpBot berjalan 100% lokal.")
+        st.caption("Data tidak keluar dari komputer kamu.")
+
+
 def display_chat_history() -> None:
     """Tampilkan semua riwayat chat di layar."""
     for msg in st.session_state.messages:
-        # System prompt tidak ditampilkan ke user
         if msg["role"] == "system":
             continue
         with st.chat_message(msg["role"]):
@@ -45,13 +83,11 @@ def display_chat_history() -> None:
 
 def handle_user_input(user_input: str) -> None:
     """Proses input user — kirim ke Ollama dan tampilkan respons."""
-    # Tampilkan pesan user langsung
     with st.chat_message("user"):
         st.markdown(user_input)
 
     st.session_state.messages.append({"role": "user", "content": user_input})
 
-    # Tampilkan respons bot dengan efek streaming (karakter per karakter)
     with st.chat_message("assistant"):
         with st.spinner("HelpBot sedang mengetik..."):
             try:
@@ -72,12 +108,15 @@ def main() -> None:
     """Entry point aplikasi Streamlit."""
     st.set_page_config(page_title="HelpBot — IT Helpdesk", page_icon="💻")
     st.title("💻 HelpBot — IT Helpdesk Assistant")
-    st.caption(f"Powered by Ollama + {model} | Berjalan 100% lokal")
 
     initialize_session()
+
+    # Render sidebar — harus dipanggil SEBELUM chat history
+    # supaya sidebar muncul di semua state halaman
+    render_sidebar()
+
     display_chat_history()
 
-    # Input box di bagian bawah halaman
     user_input = st.chat_input("Ketik pertanyaan IT kamu di sini...")
     if user_input:
         handle_user_input(user_input)
