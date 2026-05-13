@@ -4,6 +4,12 @@ Chatbot internal untuk IT Helpdesk — berjalan **100% lokal** menggunakan Ollam
 
 ---
 
+## Tampilan Aplikasi
+
+![HelpBot Web UI](docs/screenshot.png)
+
+---
+
 ## Stack
 
 | Komponen | Teknologi | Keterangan |
@@ -43,7 +49,10 @@ Chatbot internal untuk IT Helpdesk — berjalan **100% lokal** menggunakan Ollam
 ### Stage 5 — Streamlit UI ✅ SELESAI
 - [x] Web UI dengan Streamlit
 - [x] Chat interface (bubble chat)
+- [x] Sidebar info: nama model dan jumlah pesan dalam sesi
+- [x] Tombol "Hapus Percakapan" untuk reset chat
 - [x] Prototype untuk validasi fitur
+
 
 ### Stage 6 — FastAPI ⬜ BELUM MULAI
 - [ ] REST API endpoint untuk chat
